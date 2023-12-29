@@ -10,43 +10,109 @@ const { title } = Astro.props;
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="description" content="Vermilion Sands" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
   </head>
   <body>
-    <slot />
+    <div class="wrapper"><slot /></div>
   </body>
 </html>
 
 <style is:global>
-  :root {
-    --accent: 136, 58, 234;
-    --accent-light: 224, 204, 250;
-    --accent-dark: 49, 10, 101;
-    --accent-gradient: linear-gradient(
-      45deg,
-      rgb(var(--accent)),
-      rgb(var(--accent-light)) 30%,
-      white 60%
-    );
+  @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap");
+
+  body {
+    margin: 0;
+    font-family: "Cormorant Garamond", serif;
+    font-weight: 300;
+    background-color: #222;
+    color: #ccc;
   }
-  html {
+  * {
+    box-sizing: border-box;
+  }
+  a {
+    color: white;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .wrapper {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 0 1fr 0;
+    grid-template-areas:
+      "head head head"
+      ".    name    ."
+      ".    side    ."
+      ".    text    .";
+  }
+
+  @media (min-width: 46rem) {
+    .wrapper {
+      grid-template-columns: 1fr minmax(20rem, 30rem) minmax(20rem, 30rem) 1fr;
+      grid-template-areas:
+        "head head head head"
+        ".    name name    ."
+        ".    text side    ."
+        ".    text side    .";
+    }
+  }
+
+  .main-head {
+    grid-area: head;
+    display: grid;
+    grid-template-columns: min-content 1fr min-content;
+    background-color: #c00;
+    color: #210;
+    padding: 0.2rem 0.5rem;
     font-family: system-ui, sans-serif;
-    background: #222;
-    background-size: 224px;
+    text-transform: uppercase;
   }
-  code {
-    font-family:
-      Menlo,
-      Monaco,
-      Lucida Console,
-      Liberation Mono,
-      DejaVu Sans Mono,
-      Bitstream Vera Sans Mono,
-      Courier New,
-      monospace;
+
+  .main-head .brand {
+    align-self: end;
+    font-weight: 700;
+    letter-spacing: 0.2rem;
+    white-space: nowrap;
+  }
+
+  .main-head .kind {
+    align-self: end;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.05rem;
+    white-space: nowrap;
+  }
+
+  .main-name {
+    grid-area: name;
+  }
+
+  h1.main-name {
+    margin: 0;
+    padding: 0;
+  }
+
+  .main-side {
+    grid-area: side;
+    font-weight: 300;
+    font-size: 1.1rem;
+  }
+
+  .main-side img {
+    width: 100%;
+  }
+
+  .main-text {
+    grid-area: text;
+    font-weight: 300;
+    font-size: 1.1rem;
+    line-height: 1.5rem;
   }
 </style>
