@@ -1,4 +1,5 @@
 ---
+import sortBy from "lodash/sortBy";
 import MainHead from "../../components/MainHead.astro";
 import MainText from "../../components/MainText.astro";
 import MainName from "../../components/MainName.astro";
@@ -12,26 +13,29 @@ const response = await fetch(
 const data = (await response.json()) as JsonData;
 const { id } = Astro.params;
 
-const releases: Release[] = Object.values(data.releases)
-  .filter(release_is_approved)
-  .filter((json) => json.date.substring(0, 4) == id)
-  .map((json) => ({
-    ...json,
-    label: json.label_id
-      ? { ...data.labels[json.label_id], releases: [] }
-      : null,
-    artists: json.artist_ids.map((id) => ({
-      ...data.artists[id],
-      releases: [],
+const releases: Release[] = sortBy(
+  Object.values(data.releases)
+    .filter(release_is_approved)
+    .filter((json) => json.date.substring(0, 4) == id)
+    .map((json) => ({
+      ...json,
+      label: json.label_id
+        ? { ...data.labels[json.label_id], releases: [] }
+        : null,
+      artists: json.artist_ids.map((id) => ({
+        ...data.artists[id],
+        releases: [],
+      })),
+      genres: json.genre_id_ords.map(({ id, ord }) => ({
+        ord,
+        ...data.genres[id],
+        parents: [],
+        sub_genres: [],
+        releases: [],
+      })),
     })),
-    genres: json.genre_id_ords.map(({ id, ord }) => ({
-      ord,
-      ...data.genres[id],
-      parents: [],
-      sub_genres: [],
-      releases: [],
-    })),
-  }));
+  "date"
+);
 ---
 
 <Layout title={"Year: " + id}>
