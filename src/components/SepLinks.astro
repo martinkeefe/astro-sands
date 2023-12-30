@@ -1,0 +1,20 @@
+---
+interface Props {
+  sep?: string;
+  links: [string, string, string?][];
+}
+
+const { sep = " • ", links = [] } = Astro.props;
+---
+
+<>
+  {
+    links.map(([url, txt, xtra], i) => (
+      <>
+        {i == 0 ? "" : sep}
+        <a href={url}>{txt}</a>
+        {xtra}
+      </>
+    ))
+  }
+</>

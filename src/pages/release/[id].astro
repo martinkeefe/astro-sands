@@ -1,0 +1,227 @@
+---
+import { smartypantsu } from "smartypants";
+import MainHead from "../../components/MainHead.astro";
+import MainSide from "../../components/MainSide.astro";
+import MainText from "../../components/MainText.astro";
+import MainName from "../../components/MainName.astro";
+import SepLinks from "../../components/SepLinks.astro";
+import Layout from "../../layouts/Layout.astro";
+import type { JsonData, Release } from "../../types";
+import {
+  artist_name,
+  link_site,
+  release_artist_names,
+  release_has_score,
+  release_image_src,
+  release_kind,
+  release_score,
+} from "../../functions";
+
+const response = await fetch(
+  "https://mjk-decades.s3.eu-west-2.amazonaws.com/db.json"
+);
+const data = (await response.json()) as JsonData;
+const { id } = Astro.params;
+
+let release: Release;
+
+if (id && id in data.releases) {
+  const json = data.releases[id];
+
+  release = {
+    ...json,
+    label:
+      json.label_id && json.label_id in data.labels
+        ? { ...data.labels[json.label_id], releases: [] }
+        : null,
+    artists: json.artist_ids
+      .filter((id) => id in data.artists)
+      .map((id) => ({
+        ...data.artists[id],
+        releases: [],
+      })),
+    genres: json.genre_id_ords
+      .filter(({ id }) => id in data.genres)
+      .map(({ id, ord }) => ({
+        ord,
+        ...data.genres[id],
+        parents: [],
+        sub_genres: [],
+        releases: [],
+      })),
+  };
+} else {
+  return new Response(null, {
+    status: 404,
+    statusText: "Not found",
+  });
+}
+
+const year = release.date.substring(0, 4);
+const main_genres = release.genres.filter((g) => g.ord < 100);
+const other_genres = release.genres.filter((g) => g.ord > 100);
+
+const SITE_NAMES: Record<string, string> = {
+  "bandcamp.com": "Bandcamp",
+  "soundcloud.com": "SoundCloud",
+  "music.youtube.com": "YouTube Music",
+  "spotify.com": "Spotify",
+  "apple.com": "Apple",
+  "deezer.com": "Deezer",
+  "youtube.com": "YouTube",
+  "wikipedia.org": "Wikipedia",
+  "wikidata.org": "WikiData",
+  "musicbrainz.org": "MusicBrainz",
+  "discogs.com": "Discogs",
+  "allmusic.com": "AllMusic",
+  "rateyourmusic.com": "RateYourMusic",
+  "albumoftheyear.org": "AlbumOfTheYear",
+};
+
+function make_links(release: Release) {
+  const links: [string, string, string?][] = [];
+  for (const site of Object.keys(SITE_NAMES)) {
+    for (const link of release.links) {
+      if (link_site(link) == site) {
+        const lnk: [string, string, string?] = [link.url, SITE_NAMES[site]];
+        if (site == "rateyourmusic.com" && release_has_score(release, "rym")) {
+          lnk.push(` (${release_score(release, "rym")} / 5)`);
+        } else if (
+          site == "albumoftheyear.org" &&
+          release_has_score(release, "aoty") &&
+          release_score(release, "aoty") !== "-"
+        ) {
+          lnk.push(` (${release_score(release, "aoty")})`);
+        } else lnk.push("");
+        links.push(lnk);
+        break;
+      }
+    }
+  }
+  return links;
+}
+---
+
+<Layout title={"Year: " + id}>
+  <MainHead>{release_kind(release)}</MainHead>
+
+  <MainName>
+    <span class="artist">{release_artist_names(release)}</span>:
+    <span class="title">{release.title}</span>
+    {release.which ? ` [${release.which}] ` : ""}
+     (<a href={`/year/${year}`}>{year}</a>
+    {release.label ? ", " : ""}
+    {
+      release.label ? (
+        <a href={`/label/${release.label.id}`}>{release.label.name}</a>
+      ) : (
+        ""
+      )
+    })
+  </MainName>
+
+  <MainSide>
+    <img src={release_image_src(release)} />
+
+    {
+      release.artists.length > 0 ? (
+        <div class="info">
+          {release.artists.length == 1 ? "artist: " : "artists: "}
+          <SepLinks
+            links={release.artists.map((artist) => [
+              `/artist/${artist.id}`,
+              artist_name(artist),
+            ])}
+          />
+        </div>
+      ) : null
+    }
+
+    {
+      main_genres.length > 0 ? (
+        <div class="info">
+          {main_genres.length == 1 ? "genre: " : "genres: "}
+          <SepLinks
+            links={main_genres.map((genre) => [
+              `/genre/${genre.id}`,
+              genre.name,
+            ])}
+          />
+        </div>
+      ) : null
+    }
+    {
+      other_genres.length > 0 ? (
+        <div class="info" style="margin-top: -0.6rem">
+          with some:
+          <SepLinks
+            links={other_genres.map((genre) => [
+              `/genre/${genre.id}`,
+              genre.name,
+            ])}
+          />
+        </div>
+      ) : null
+    }
+
+    {
+      release.links.length > 0 ? (
+        <div class="info">
+          external links: <SepLinks links={make_links(release)} />
+        </div>
+      ) : null
+    }
+  </MainSide>
+
+  {
+    release.text ? (
+      <MainText>
+        {release.text
+          .split("\n\n")
+          .map((para) =>
+            para.startsWith("-") ? (
+              <p class="byline">{para.substring(2)}</p>
+            ) : (
+              <p class="text">{smartypantsu(para, "1")}</p>
+            )
+          )}
+      </MainText>
+    ) : null
+  }
+</Layout>
+
+<style>
+  h1 {
+    font-weight: 300;
+  }
+
+  img {
+    margin-bottom: 2rem;
+  }
+
+  .artist {
+    font-weight: 600;
+  }
+
+  .title {
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  p.text {
+    margin: 0;
+    margin-bottom: 0.6rem;
+    text-align: justify;
+  }
+
+  p.byline {
+    margin: 0;
+    text-align: right;
+  }
+
+  .info {
+    margin-bottom: 0.6rem;
+    margin-left: 1rem;
+    text-indent: -1rem;
+  }
+</style>
