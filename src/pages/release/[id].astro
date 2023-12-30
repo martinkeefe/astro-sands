@@ -1,4 +1,5 @@
 ---
+// @ts-nocheck
 import { smartypantsu } from "smartypants";
 import MainHead from "../../components/MainHead.astro";
 import MainSide from "../../components/MainSide.astro";
@@ -104,16 +105,13 @@ function make_links(release: Release) {
 
 <Layout
   title={`Release: ${release.title} (${year})`}
-  meta={{
-    "og:site_name": "Vermilion Sands",
-    "og:title": release.title,
-    "og:description": `A ${year} ${release_kind(
-      release
-    ).toLowerCase()} by ${release_artist_names(release)}`,
-    "og:image": release_image_src(release),
-    "og:url": `vermilionsands.org/release/${id}`,
-    "og:type": "music.album",
-  }}
+  og_title={release.title}
+  og_description={`A ${year} ${release_kind(
+    release
+  ).toLowerCase()} by ${release_artist_names(release)}`}
+  og_image={release_image_src(release)}
+  og_url={`vermilionsands.org/release/${id}`}
+  og_type={"music.album"}
 >
   <MainHead>{release_kind(release)}</MainHead>
 

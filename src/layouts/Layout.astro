@@ -1,10 +1,14 @@
 ---
 interface Props {
   title: string;
-  meta: Record<string, string>;
+  og_title?: string;
+  og_description?: string;
+  og_image?: string;
+  og_url?: string;
+  og_type?: string;
 }
 
-const { title, meta } = Astro.props;
+const { title, ...meta } = Astro.props;
 ---
 
 <!doctype html>
@@ -12,6 +16,7 @@ const { title, meta } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Vermilion Sands" />
+    <meta property="og:site_name" content="Vermilion Sands" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {
       Object.entries(meta).map(([key, val]) => (
