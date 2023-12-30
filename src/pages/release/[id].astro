@@ -1,11 +1,12 @@
 ---
 // @ts-nocheck
-import { smartypantsu } from "smartypants";
+// import { smartypantsu } from "smartypants";
 import MainHead from "../../components/MainHead.astro";
 import MainSide from "../../components/MainSide.astro";
 import MainText from "../../components/MainText.astro";
 import MainName from "../../components/MainName.astro";
 import SepLinks from "../../components/SepLinks.astro";
+import FancyPara from "../../components/FancyPara.astro";
 import Layout from "../../layouts/Layout.astro";
 import type { JsonData, Release } from "../../types";
 import {
@@ -106,7 +107,7 @@ function make_links(release: Release) {
 <Layout
   title={`Release: ${release.title} (${year})`}
   og_title={release.title}
-  og_description={`A ${year} ${release_kind(
+  og_description={`${year} ${release_kind(
     release
   ).toLowerCase()} by ${release_artist_names(release)}`}
   og_image={release_image_src(release)}
@@ -118,20 +119,28 @@ function make_links(release: Release) {
   <MainName>
     <span class="artist">{release_artist_names(release)}</span>:
     <span class="title">{release.title}</span>
-    {release.which ? ` [${release.which}] ` : ""}
-     (<a href={`/year/${year}`}>{year}</a>
-    {release.label ? ", " : ""}
-    {
-      release.label ? (
-        <a href={`/label/${release.label.id}`}>{release.label.name}</a>
-      ) : (
-        ""
-      )
-    })
+    <!-- <span class="h1">
+      {release.which ? ` [${release.which}] ` : ""}
+       ({year}{release.label ? ", " : ""}{
+        release.label ? release.label.name : ""
+      })
+    </span> -->
   </MainName>
 
   <MainSide>
     <img src={release_image_src(release)} />
+
+    <div class="info">
+      released: <a href={`/year/${year}`}>{year}</a>{release.date.substring(4)}
+    </div>
+    {
+      release.label ? (
+        <div class="info" style="margin-top: -0.6rem">
+          on label:{" "}
+          <a href={`/label/${release.label.id}`}>{release.label.name}</a>
+        </div>
+      ) : null
+    }
 
     {
       release.artists.length > 0 ? (
@@ -186,22 +195,22 @@ function make_links(release: Release) {
   {
     release.text ? (
       <MainText>
-        {release.text
-          .split("\n\n")
-          .map((para) =>
-            para.startsWith("-") ? (
-              <p class="byline">{para.substring(2)}</p>
-            ) : (
-              <p class="text">{smartypantsu(para, "2")}</p>
-            )
-          )}
+        {release.text.split("\n\n").map((para) =>
+          para.startsWith("-") ? (
+            <p class="byline">{para.substring(2)}</p>
+          ) : (
+            <p class="text">
+              <FancyPara para={para} />
+            </p>
+          )
+        )}
       </MainText>
     ) : null
   }
 </Layout>
 
 <style>
-  h1 {
+  .h1 {
     font-weight: 300;
   }
 

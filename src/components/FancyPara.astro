@@ -1,0 +1,23 @@
+---
+import { smartypantsu } from "smartypants";
+
+interface Props {
+  para: string;
+}
+
+const { para } = Astro.props;
+
+const ital_1st = para.startsWith("/");
+const parts: string[] = smartypantsu(para, "2").split("/");
+let i = ital_1st ? 1 : 0;
+---
+
+<>
+  {
+    parts.map((part) => {
+      i++;
+      if (part.length == 0) return "/";
+      return i % 2 == 1 ? part : <i>{part}</i>;
+    })
+  }
+</>
