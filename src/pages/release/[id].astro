@@ -102,7 +102,19 @@ function make_links(release: Release) {
 }
 ---
 
-<Layout title={"Year: " + id}>
+<Layout
+  title={`Release: ${release.title} (${year})`}
+  meta={{
+    "og:site_name": "Vermilion Sands",
+    "og:title": release.title,
+    "og:description": `A ${year} ${release_kind(
+      release
+    ).toLowerCase()} by ${release_artist_names(release)}`,
+    "og:image": release_image_src(release),
+    "og:url": `vermilionsands.org/release/${id}`,
+    "og:type": "music.album",
+  }}
+>
   <MainHead>{release_kind(release)}</MainHead>
 
   <MainName>
@@ -182,7 +194,7 @@ function make_links(release: Release) {
             para.startsWith("-") ? (
               <p class="byline">{para.substring(2)}</p>
             ) : (
-              <p class="text">{smartypantsu(para, "1")}</p>
+              <p class="text">{smartypantsu(para, "2")}</p>
             )
           )}
       </MainText>
