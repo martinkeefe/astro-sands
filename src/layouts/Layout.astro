@@ -20,7 +20,7 @@ const { title, ...meta } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {
       Object.entries(meta).map(([key, val]) => (
-        <meta property={key} content={val} />
+        <meta property={key.replace("_", ":")} content={val} />
       ))
     }
     <link rel="icon" href="/favicon.ico" />
