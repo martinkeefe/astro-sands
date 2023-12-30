@@ -1,0 +1,73 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import MainHead from "../../components/MainHead.astro";
+import MainName from "../../components/MainName.astro";
+import MainText from "../../components/MainText.astro";
+import MainSide from "../../components/MainSide.astro";
+import SepLinks from "../../components/SepLinks.astro";
+import type { JsonData, Label } from "../../types";
+import { link_site } from "../../functions";
+
+const response = await fetch(
+  "https://mjk-decades.s3.eu-west-2.amazonaws.com/db.json"
+);
+const data = (await response.json()) as JsonData;
+const { id } = Astro.params;
+
+let label: Label;
+
+if (id && id in data.labels) {
+  const json = data.labels[id];
+
+  label = {
+    ...json,
+    releases: [],
+  };
+} else {
+  return new Response(null, {
+    status: 404,
+    statusText: "Not found",
+  });
+}
+
+const links: [string, string, string?][] = label.links.map((lnk) => [
+  lnk.url,
+  link_site(lnk),
+  lnk.which ? ` (${lnk.which})` : undefined,
+]);
+---
+
+<Layout title={`Label: ${label.name}`}>
+  <MainHead>Label</MainHead>
+  <MainName>{label.name}</MainName>
+  <MainText>More Coming Soon!</MainText>
+  <MainSide>
+    {
+      links.length > 0 ? (
+        <div class="info">
+          external links: <SepLinks links={links} />
+        </div>
+      ) : null
+    }
+  </MainSide>
+</Layout>
+
+<style>
+  p.text {
+    margin: 0;
+    margin-bottom: 0.6rem;
+    text-align: justify;
+  }
+
+  p.byline {
+    margin: 0;
+    margin-bottom: 1.5rem;
+    text-align: right;
+  }
+
+  .info {
+    margin-bottom: 0.6rem;
+    margin-left: 1rem;
+    text-indent: -1rem;
+  }
+</style>

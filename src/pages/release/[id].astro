@@ -1,13 +1,12 @@
 ---
 // @ts-nocheck
-// import { smartypantsu } from "smartypants";
+import Layout from "../../layouts/Layout.astro";
 import MainHead from "../../components/MainHead.astro";
 import MainSide from "../../components/MainSide.astro";
 import MainText from "../../components/MainText.astro";
 import MainName from "../../components/MainName.astro";
 import SepLinks from "../../components/SepLinks.astro";
 import FancyPara from "../../components/FancyPara.astro";
-import Layout from "../../layouts/Layout.astro";
 import type { JsonData, Release } from "../../types";
 import {
   artist_name,
@@ -105,7 +104,7 @@ function make_links(release: Release) {
 ---
 
 <Layout
-  title={`Release: ${release.title} (${year})`}
+  title={`Release: ${release.title}`}
   og_title={release.title}
   og_description={`${year} ${release_kind(
     release
@@ -210,12 +209,8 @@ function make_links(release: Release) {
 </Layout>
 
 <style>
-  .h1 {
-    font-weight: 300;
-  }
-
   img {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
 
   .artist {
