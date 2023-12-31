@@ -62,14 +62,17 @@ const year = release.date.substring(0, 4);
 const main_genres = release.genres.filter((g) => g.ord < 100);
 const other_genres = release.genres.filter((g) => g.ord > 100);
 
-const SITE_NAMES: Record<string, string> = {
+const STREAMERS: Record<string, string> = {
   "bandcamp.com": "Bandcamp",
   "soundcloud.com": "SoundCloud",
   "music.youtube.com": "YouTube Music",
   "spotify.com": "Spotify",
   "apple.com": "Apple",
   "deezer.com": "Deezer",
-  "youtube.com": "YouTube",
+  // "youtube.com": "YouTube",
+};
+
+const SITE_NAMES: Record<string, string> = {
   "wikipedia.org": "Wikipedia",
   "wikidata.org": "WikiData",
   "musicbrainz.org": "MusicBrainz",
@@ -79,12 +82,12 @@ const SITE_NAMES: Record<string, string> = {
   "albumoftheyear.org": "AlbumOfTheYear",
 };
 
-function make_links(release: Release) {
+function make_links(site_list: Record<string, string>, release: Release) {
   const links: [string, string, string?][] = [];
-  for (const site of Object.keys(SITE_NAMES)) {
+  for (const site of Object.keys(site_list)) {
     for (const link of release.links) {
       if (link_site(link) == site) {
-        const lnk: [string, string, string?] = [link.url, SITE_NAMES[site]];
+        const lnk: [string, string, string?] = [link.url, site_list[site]];
         if (site == "rateyourmusic.com" && release_has_score(release, "rym")) {
           lnk.push(` (${release_score(release, "rym")} / 5)`);
         } else if (
@@ -101,6 +104,9 @@ function make_links(release: Release) {
   }
   return links;
 }
+
+const stream_links = make_links(STREAMERS, release);
+const other_links = make_links(SITE_NAMES, release);
 ---
 
 <Layout
@@ -124,6 +130,7 @@ function make_links(release: Release) {
         release.label ? release.label.name : ""
       })
     </span> -->
+    {release.status == "A*" ? " ⭐" : null}
   </MainName>
 
   <MainSide>
@@ -183,9 +190,16 @@ function make_links(release: Release) {
     }
 
     {
-      release.links.length > 0 ? (
+      stream_links.length > 0 ? (
         <div class="info">
-          external links: <SepLinks links={make_links(release)} />
+          listen at: <SepLinks links={stream_links} />
+        </div>
+      ) : null
+    }
+    {
+      other_links.length > 0 ? (
+        <div class="info">
+          see also: <SepLinks links={other_links} />
         </div>
       ) : null
     }
