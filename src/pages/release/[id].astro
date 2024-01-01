@@ -78,8 +78,19 @@ const SITE_NAMES: Record<string, string> = {
   "musicbrainz.org": "MusicBrainz",
   "discogs.com": "Discogs",
   "allmusic.com": "AllMusic",
+  "progarchives.com": "ProgArchives",
   "rateyourmusic.com": "RateYourMusic",
   "albumoftheyear.org": "AlbumOfTheYear",
+};
+
+const REVIEWS: Record<string, string> = {
+  "bbc.co.uk": "BBC",
+  "theguardian.com": "The Guardian",
+  "pitchfork.com": "Pitchfork",
+  "nme.com": "NME",
+  "undertheradarmag.com": "Under the Radar",
+  "slantmagazine.com": "Slant",
+  "popmatters.com": "Pop Matters",
 };
 
 function make_links(site_list: Record<string, string>, release: Release) {
@@ -107,6 +118,7 @@ function make_links(site_list: Record<string, string>, release: Release) {
 
 const stream_links = make_links(STREAMERS, release);
 const other_links = make_links(SITE_NAMES, release);
+const review_links = make_links(REVIEWS, release);
 ---
 
 <Layout
@@ -200,6 +212,13 @@ const other_links = make_links(SITE_NAMES, release);
       other_links.length > 0 ? (
         <div class="info">
           see also: <SepLinks links={other_links} />
+        </div>
+      ) : null
+    }
+    {
+      review_links.length > 0 ? (
+        <div class="info">
+          more reviews: <SepLinks links={review_links} />
         </div>
       ) : null
     }

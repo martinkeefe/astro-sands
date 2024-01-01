@@ -15,7 +15,7 @@ if (ital_1st) {
   i = 1;
 }
 
-const parts: string[] = smartypantsu(para, "2").split("/");
+const parts: string[] = smartypantsu(para.replace(/`/g, "’"), "2").split("/");
 ---
 
 <>
