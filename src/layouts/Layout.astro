@@ -42,12 +42,12 @@ const { title, hide = "", ...meta } = Astro.props;
 </html>
 
 <style is:global>
-  @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap");
 
   body {
     margin: 0;
-    font-family: "Cormorant Garamond", serif;
-    font-weight: 400;
+    font-family: Merriweather, serif;
+    font-weight: 300;
     background-color: #222;
     color: #ccc;
   }
@@ -167,8 +167,9 @@ const { title, hide = "", ...meta } = Astro.props;
 
   .main-side {
     grid-area: side;
-    font-weight: 300;
-    font-size: 1.1rem;
+    /* font-weight: 300; */
+    /* font-size: 1.1rem; */
+    line-height: 1.5rem;
   }
 
   .main-side img {
@@ -177,13 +178,14 @@ const { title, hide = "", ...meta } = Astro.props;
 
   .main-text {
     grid-area: text;
-    font-weight: 300;
-    font-size: 1.1rem;
+    /* font-weight: 300; */
+    /* font-size: 1.1rem; */
     line-height: 1.5rem;
   }
 
   .main-wide {
     grid-area: wide;
     margin-bottom: 1rem;
+    line-height: 1.4rem;
   }
 </style>
