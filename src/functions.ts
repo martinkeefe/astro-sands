@@ -107,9 +107,11 @@ export const genres_string = (genres: ReleaseGenre[]): string =>
 
 // -----------------------------------------------------------------------------
 
-export const link_site = (link: Link): string => {
+export const link_site = (link: Link): string => url_site(link.url);
+
+export const url_site = (url: string): string => {
   try {
-    const host = new URL(link.url).host.split(".");
+    const host = new URL(url).host.split(".");
     let site = host.slice(host.length - 2).join(".");
     if (site === "co.uk") {
       site = host.slice(host.length - 3).join(".");
@@ -119,6 +121,6 @@ export const link_site = (link: Link): string => {
     }
     return site;
   } catch {
-    return link.url;
+    return url;
   }
 };

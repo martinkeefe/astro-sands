@@ -1,10 +1,13 @@
 ---
+import ExternalLink from "./ExternalLink.astro";
+
 interface Props {
   sep?: string;
   links: [string, string, string?][];
+  external?: boolean;
 }
 
-const { sep = " • ", links = [] } = Astro.props;
+const { sep = " • ", links = [], external = false } = Astro.props;
 ---
 
 <>
@@ -12,7 +15,7 @@ const { sep = " • ", links = [] } = Astro.props;
     links.map(([url, txt, xtra], i) => (
       <>
         {i == 0 ? "" : sep}
-        <a href={url}>{txt}</a>
+        {external ? <ExternalLink {url} /> : <a href={url}>{txt}</a>}
         {xtra}
       </>
     ))

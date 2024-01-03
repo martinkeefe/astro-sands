@@ -204,21 +204,21 @@ const review_links = make_links(REVIEWS, release);
     {
       stream_links.length > 0 ? (
         <div class="info">
-          listen at: <SepLinks links={stream_links} />
+          listen at: <SepLinks links={stream_links} external />
         </div>
       ) : null
     }
     {
       other_links.length > 0 ? (
         <div class="info">
-          see also: <SepLinks links={other_links} />
+          see also: <SepLinks links={other_links} external />
         </div>
       ) : null
     }
     {
       review_links.length > 0 ? (
         <div class="info">
-          more reviews: <SepLinks links={review_links} />
+          more reviews: <SepLinks links={review_links} external />
         </div>
       ) : null
     }

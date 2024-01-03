@@ -1,0 +1,68 @@
+---
+import { url_site } from "../functions";
+interface Props {
+  url: string;
+}
+
+const { url } = Astro.props;
+
+interface Site {
+  name: string;
+  image?: string;
+}
+
+const SITES: Record<string, Site> = {
+  "bandcamp.com": { name: "Bandcamp", image: "bandcamp.com.png" },
+  "soundcloud.com": { name: "Sound Cloud", image: "soundcloud.com.ico" },
+  "spotify.com": { name: "Spotify", image: "spotify.com (2).png" },
+  "apple.com": { name: "Apple", image: "apple.com.ico" },
+  "deezer.com": { name: "Deezer", image: "deezer.com.jpg" },
+  "wikipedia.org": { name: "Wikipedia", image: "wikipedia.org.png" },
+  "wikidata.org": { name: "WikiData", image: "wikidata.org.png" },
+  "musicbrainz.org": { name: "Music Brainz", image: "musicbrainz.org.png" },
+  "discogs.com": { name: "Discogs", image: "discogs.com.png" },
+  "allmusic.com": { name: "All Music", image: "allmusic.com.jpg" },
+  "progarchives.com": { name: "Prog Archives" },
+  "rateyourmusic.com": {
+    name: "Rate Your Music",
+    image: "rateyourmusic.com.png",
+  },
+  "albumoftheyear.org": {
+    name: "Album of the Year",
+    image: "albumoftheyear.org.png",
+  },
+  "theguardian.com": { name: "The Guardian", image: "theguardian.com.png" },
+  "pitchfork.com": { name: "Pitchfork", image: "pitchfork.com (2).png" },
+  "nme.com": { name: "NME", image: "nme.com.png" },
+  "undertheradarmag.com": {
+    name: "Under the Radar",
+    image: "undertheradarmag.com.gif",
+  },
+  "slantmagazine.com": { name: "Slant", image: "slantmagazine.com (2).png" },
+  "popmatters.com": { name: "Pop Matters", image: "popmatters.com.jpg" },
+  "starsend.org": { name: "Star’s End" },
+  "bbc.co.uk": { name: "BBC", image: "bbc.co.uk.png" },
+  "music.youtube.com": {
+    name: "YouTube Music",
+    image: "music.youtube.com.png",
+  },
+};
+
+const domain = url_site(url);
+const { name, image } =
+  domain in SITES ? SITES[domain] : { name: domain, image: undefined };
+---
+
+<a href={url}>{image ? <img src={"/image/" + image} /> : null} {name}</a>
+
+<style>
+  a {
+    display: inline-block;
+    text-indent: 0;
+  }
+  img {
+    width: 1.25rem;
+    height: 1.25rem;
+    vertical-align: text-bottom;
+  }
+</style>

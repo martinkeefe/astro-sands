@@ -64,7 +64,7 @@ const links: [string, string, string?][] = artist.links.map((lnk) => [
     {
       links.length > 0 ? (
         <div class="info">
-          external links: <SepLinks links={links} />
+          external links: <SepLinks links={links} external />
         </div>
       ) : null
     }
