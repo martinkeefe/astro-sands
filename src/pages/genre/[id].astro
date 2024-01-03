@@ -58,11 +58,14 @@ if (id && id in data.genres) {
   });
 }
 
-const links: [string, string, string?][] = genre.links.map((lnk) => [
-  lnk.url,
-  link_site(lnk),
-  lnk.which ? ` (${lnk.which})` : undefined,
-]);
+const links: [string, string, string?][] = sortBy(
+  genre.links.map((lnk) => [
+    lnk.url,
+    link_site(lnk),
+    lnk.which ? ` (${lnk.which})` : undefined,
+  ]),
+  ([_, site]) => site
+);
 ---
 
 <Layout title={`Genre: ${genre.name}`}>
@@ -76,7 +79,7 @@ const links: [string, string, string?][] = genre.links.map((lnk) => [
     {
       links.length > 0 ? (
         <div class="info">
-          external links: <SepLinks links={links} external />
+          see also: <SepLinks links={links} external />
         </div>
       ) : null
     }

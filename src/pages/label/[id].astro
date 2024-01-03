@@ -51,11 +51,14 @@ if (id && id in json.labels) {
   });
 }
 
-const links: [string, string, string?][] = label.links.map((lnk) => [
-  lnk.url,
-  link_site(lnk),
-  lnk.which ? ` (${lnk.which})` : undefined,
-]);
+const links: [string, string, string?][] = sortBy(
+  label.links.map((lnk) => [
+    lnk.url,
+    link_site(lnk),
+    lnk.which ? ` (${lnk.which})` : undefined,
+  ]),
+  ([_, site]) => site
+);
 ---
 
 <Layout title={`Label: ${label.name}`}>

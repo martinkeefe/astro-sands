@@ -47,11 +47,14 @@ if (id && id in data.artists) {
   });
 }
 
-const links: [string, string, string?][] = artist.links.map((lnk) => [
-  lnk.url,
-  link_site(lnk),
-  lnk.which ? ` (${lnk.which})` : undefined,
-]);
+const links: [string, string, string?][] = sortBy(
+  artist.links.map((lnk) => [
+    lnk.url,
+    link_site(lnk),
+    lnk.which ? ` (${lnk.which})` : undefined,
+  ]),
+  ([_, site]) => site
+);
 ---
 
 <Layout title={`Artist: ${artist_name(artist)}`}>
@@ -64,7 +67,7 @@ const links: [string, string, string?][] = artist.links.map((lnk) => [
     {
       links.length > 0 ? (
         <div class="info">
-          external links: <SepLinks links={links} external />
+          see also: <SepLinks links={links} external />
         </div>
       ) : null
     }
