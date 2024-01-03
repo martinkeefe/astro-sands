@@ -1,6 +1,9 @@
 ---
+// https://ogp.me
+
 interface Props {
   title: string;
+  hide?: string;
   og_title?: string;
   og_description?: string;
   og_image?: string;
@@ -8,7 +11,7 @@ interface Props {
   og_type?: string;
 }
 
-const { title, ...meta } = Astro.props;
+const { title, hide = "", ...meta } = Astro.props;
 ---
 
 <!doctype html>
@@ -28,17 +31,23 @@ const { title, ...meta } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <div class="wrapper"><slot /></div>
+    <div
+      class={hide.length == 0
+        ? "wrapper"
+        : `wrapper hide-${hide.toLowerCase()}`}
+    >
+      <slot />
+    </div>
   </body>
 </html>
 
 <style is:global>
-  @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,700;1,400&display=swap");
 
   body {
     margin: 0;
     font-family: "Cormorant Garamond", serif;
-    font-weight: 300;
+    font-weight: 400;
     background-color: #222;
     color: #ccc;
   }
@@ -52,6 +61,9 @@ const { title, ...meta } = Astro.props;
   a:hover {
     text-decoration: underline;
   }
+  b {
+    font-weight: 700;
+  }
 
   .wrapper {
     display: grid;
@@ -61,7 +73,29 @@ const { title, ...meta } = Astro.props;
       "head head head"
       ".    name    ."
       ".    side    ."
-      ".    text    .";
+      ".    text    ."
+      ".    wide    .";
+  }
+  .wrapper.hide-s {
+    grid-template-areas:
+      "head head head"
+      ".    name    ."
+      ".    text    ."
+      ".    wide    .";
+  }
+  .wrapper.hide-t {
+    grid-template-areas:
+      "head head head"
+      ".    name    ."
+      ".    side    ."
+      ".    wide    .";
+  }
+  .wrapper.hide-st,
+  .wrapper.hide-ts {
+    grid-template-areas:
+      "head head head"
+      ".    name    ."
+      ".    wide    .";
   }
 
   @media (min-width: 46rem) {
@@ -71,7 +105,28 @@ const { title, ...meta } = Astro.props;
         "head head head head"
         ".    name name    ."
         ".    text side    ."
-        ".    text side    .";
+        ".    wide wide    .";
+    }
+    .wrapper.hide-s {
+      grid-template-areas:
+        "head head head head"
+        ".    name name    ."
+        ".    text text    ."
+        ".    wide wide    .";
+    }
+    .wrapper.hide-t {
+      grid-template-areas:
+        "head head head head"
+        ".    name name    ."
+        ".    side side    ."
+        ".    wide wide    .";
+    }
+    .wrapper.hide-st,
+    .wrapper.hide-ts {
+      grid-template-areas:
+        "head head head head"
+        ".    name name    ."
+        ".    wide wide    .";
     }
   }
 
@@ -125,5 +180,10 @@ const { title, ...meta } = Astro.props;
     font-weight: 300;
     font-size: 1.1rem;
     line-height: 1.5rem;
+  }
+
+  .main-wide {
+    grid-area: wide;
+    margin-bottom: 1rem;
   }
 </style>

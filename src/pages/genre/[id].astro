@@ -1,11 +1,14 @@
 ---
+import sortBy from "lodash/sortBy";
 import Layout from "../../layouts/Layout.astro";
 import MainHead from "../../components/MainHead.astro";
 import MainName from "../../components/MainName.astro";
 import MainText from "../../components/MainText.astro";
 import MainSide from "../../components/MainSide.astro";
+import MainWide from "../../components/MainWide.astro";
 import SepLinks from "../../components/SepLinks.astro";
-import type { JsonData, Genre } from "../../types";
+import Releases from "../../components/Releases.astro";
+import type { JsonData, Genre, Release } from "../../types";
 import { link_site } from "../../functions";
 
 const response = await fetch(
@@ -23,7 +26,30 @@ if (id && id in data.genres) {
     ...json,
     parents: [],
     sub_genres: [],
-    releases: [],
+    releases: sortBy(
+      Object.values(data.releases)
+        .filter(
+          (r) =>
+            r.status?.startsWith("A") &&
+            r.genre_id_ords.map(({ id }) => id).includes(id)
+        )
+        .map(
+          (r) =>
+            ({
+              ...r,
+              text: null,
+              label: null,
+              artists: r.artist_ids
+                .filter((id) => id in data.artists)
+                .map((id) => ({
+                  ...data.artists[id],
+                  releases: [],
+                })),
+              genres: [],
+            }) satisfies Release
+        ),
+      "date"
+    ),
   };
 } else {
   return new Response(null, {
@@ -45,7 +71,6 @@ const links: [string, string, string?][] = genre.links.map((lnk) => [
   <MainText>
     <p class="text">{genre.desc}</p>
     <p class="byline">RateYourMusic</p>
-    <p class="text">More Coming Soon!</p>
   </MainText>
   <MainSide>
     {
@@ -56,9 +81,13 @@ const links: [string, string, string?][] = genre.links.map((lnk) => [
       ) : null
     }
   </MainSide>
+  <MainWide><Releases releases={genre.releases} /></MainWide>
 </Layout>
 
 <style>
+  h1 {
+    margin-bottom: 2rem;
+  }
   p.text {
     margin: 0;
     margin-bottom: 0.6rem;

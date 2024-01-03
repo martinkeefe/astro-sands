@@ -31,19 +31,33 @@ const years: Year[] = sortBy(
 <Layout title="Years">
   <MainHead>Years</MainHead>
   <MainText>
-    {
-      years.map((year) => (
-        <div>
-          <a href={"/year/" + year.id}>{year.id}</a>
-          <div class="count" style={`width: ${year.count * 3}px`} />
-          {year.count}
-        </div>
-      ))
-    }
+    <table>
+      {
+        years.map((year) => (
+          <tr>
+            <td>
+              <a href={"/year/" + year.id}>{year.id}</a>
+            </td>
+            <td>
+              <div class="count" style={`width: ${year.count * 4}px`} />
+              {year.count}
+            </td>
+          </tr>
+        ))
+      }
+    </table>
   </MainText>
 </Layout>
 
 <style>
+  table {
+    border-collapse: collapse;
+  }
+  tr,
+  td {
+    margin: 0;
+    padding: 0;
+  }
   .count {
     margin: 0 4px 0 8px;
     display: inline-block;

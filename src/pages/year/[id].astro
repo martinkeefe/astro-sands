@@ -1,8 +1,9 @@
 ---
 import sortBy from "lodash/sortBy";
 import MainHead from "../../components/MainHead.astro";
-import MainText from "../../components/MainText.astro";
+import MainWide from "../../components/MainWide.astro";
 import MainName from "../../components/MainName.astro";
+import Releases from "../../components/Releases.astro";
 import Layout from "../../layouts/Layout.astro";
 import type { JsonData, Release } from "../../types";
 import { release_is_approved } from "../../functions";
@@ -38,16 +39,10 @@ const releases: Release[] = sortBy(
 );
 ---
 
-<Layout title={"Year: " + id}>
+<Layout title={"Year: " + id} hide="TS">
   <MainHead>Year</MainHead>
   <MainName>{id}</MainName>
-  <MainText>
-    {
-      releases.map((r) => (
-        <div>
-          <a href={`/release/${r.id}`}>{r.title}</a>
-        </div>
-      ))
-    }
-  </MainText>
+  <MainWide>
+    <Releases {releases} hide="Y" />
+  </MainWide>
 </Layout>

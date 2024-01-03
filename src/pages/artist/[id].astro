@@ -1,11 +1,14 @@
 ---
+import sortBy from "lodash/sortBy";
 import Layout from "../../layouts/Layout.astro";
 import MainHead from "../../components/MainHead.astro";
 import MainName from "../../components/MainName.astro";
 import MainText from "../../components/MainText.astro";
 import MainSide from "../../components/MainSide.astro";
+import MainWide from "../../components/MainWide.astro";
 import SepLinks from "../../components/SepLinks.astro";
-import type { JsonData, Artist } from "../../types";
+import Releases from "../../components/Releases.astro";
+import type { JsonData, Artist, Release } from "../../types";
 import { artist_name, link_site } from "../../functions";
 
 const response = await fetch(
@@ -21,7 +24,21 @@ if (id && id in data.artists) {
 
   artist = {
     ...json,
-    releases: [],
+    releases: sortBy(
+      Object.values(data.releases)
+        .filter((r) => r.status?.startsWith("A") && r.artist_ids.includes(id))
+        .map(
+          (r) =>
+            ({
+              ...r,
+              text: null,
+              label: null,
+              artists: [],
+              genres: [],
+            }) satisfies Release
+        ),
+      "date"
+    ),
   };
 } else {
   return new Response(null, {
@@ -40,7 +57,9 @@ const links: [string, string, string?][] = artist.links.map((lnk) => [
 <Layout title={`Artist: ${artist_name(artist)}`}>
   <MainHead>Artist</MainHead>
   <MainName>{artist_name(artist)}</MainName>
-  <MainText>More Coming Soon!</MainText>
+  <MainWide>
+    <Releases releases={artist.releases} large />
+  </MainWide>
   <MainSide>
     {
       links.length > 0 ? (
