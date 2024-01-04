@@ -44,25 +44,44 @@ const { title, hide = "", ...meta } = Astro.props;
 <style is:global>
   @import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,700;1,300&display=swap");
 
+  :root {
+    --bg-body: hsl(0, 0%, 10%);
+    --fg-body: hsl(0, 0%, 80%);
+    --fg-link: hsl(350, 50%, 80%);
+    --bg-head: hsl(350, 70%, 50%);
+    --fg-head: hsl(350, 70%, 10%);
+
+    --face-body: Merriweather, serif;
+    --face-head: system-ui, sans-serif;
+    --wght-norm: 300;
+    --wght-ital: 300;
+    --wght-bold: 700;
+  }
+
   body {
     margin: 0;
-    font-family: Merriweather, serif;
-    font-weight: 300;
-    background-color: #222;
-    color: #ccc;
+    font-family: var(--face-body);
+    font-weight: var(--wght-norm);
+    background-color: var(--bg-body);
+    color: var(--fg-body);
   }
   * {
     box-sizing: border-box;
   }
   a {
-    color: white;
+    color: var(--fg-link);
     text-decoration: none;
   }
   a:hover {
     text-decoration: underline;
   }
-  b {
-    font-weight: 700;
+  b,
+  strong {
+    font-weight: var(--wght-bold);
+  }
+  i,
+  em {
+    font-weight: var(--wght-ital);
   }
 
   .wrapper {
@@ -134,10 +153,10 @@ const { title, hide = "", ...meta } = Astro.props;
     grid-area: head;
     display: grid;
     grid-template-columns: min-content 1fr min-content;
-    background-color: #c00;
-    color: #210;
+    background-color: var(--bg-head);
+    color: var(--fg-head);
     padding: 0.2rem 0.5rem;
-    font-family: system-ui, sans-serif;
+    font-family: var(--face-head);
     text-transform: uppercase;
   }
 

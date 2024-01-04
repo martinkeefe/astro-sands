@@ -147,7 +147,7 @@ const review_links = make_links(REVIEWS, release);
   <MainHead>{release_kind(release)}</MainHead>
 
   <MainName>
-    <span class="artist">{release_artist_names(release)}</span>:
+    <span class="artist">{release_artist_names(release)}</span>
     <span class="title">{release.title}</span>
     <!-- <span class="h1">
       {release.which ? ` [${release.which}] ` : ""}
@@ -276,6 +276,7 @@ const review_links = make_links(REVIEWS, release);
 
   p.byline {
     margin: 0;
+    margin-bottom: 2rem;
     text-align: right;
   }
 
