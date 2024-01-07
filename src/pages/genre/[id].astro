@@ -100,28 +100,30 @@ const links: [string, string, string?][] = sortBy(
     <p class="byline">RateYourMusic</p>
   </MainText>
   <MainSide>
-    {
-      super_links.length > 0 ? (
-        <div class="info">
-          a sub-genre of: <SepLinks links={super_links} />
-        </div>
-      ) : null
-    }
-    {
-      sub_links.length > 0 ? (
-        <div class="info">
-          sub-genre{sub_links.length > 1 ? "s" : ""}:{" "}
-          <SepLinks links={sub_links} />
-        </div>
-      ) : null
-    }
-    {
-      links.length > 0 ? (
-        <div class="info">
-          see also: <SepLinks links={links} external />
-        </div>
-      ) : null
-    }
+    <div class="panel">
+      {
+        super_links.length > 0 ? (
+          <div class="info">
+            a sub-genre of: <SepLinks links={super_links} />
+          </div>
+        ) : null
+      }
+      {
+        sub_links.length > 0 ? (
+          <div class="info">
+            sub-genre{sub_links.length > 1 ? "s" : ""}:{" "}
+            <SepLinks links={sub_links} />
+          </div>
+        ) : null
+      }
+      {
+        links.length > 0 ? (
+          <div class="info">
+            see also: <SepLinks links={links} external />
+          </div>
+        ) : null
+      }
+    </div>
   </MainSide>
   <MainWide><Releases releases={genre.releases} /></MainWide>
 </Layout>
@@ -140,6 +142,11 @@ const links: [string, string, string?][] = sortBy(
     margin: 0;
     margin-bottom: 1.5rem;
     text-align: right;
+  }
+
+  .panel {
+    padding: 0.5rem;
+    background-color: var(--bg-panl);
   }
 
   .info {

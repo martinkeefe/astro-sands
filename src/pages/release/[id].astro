@@ -107,6 +107,7 @@ const REVIEWS: Record<string, string> = {
   "slantmagazine.com": "Slant",
   "starsend.org": "Star’s End",
   "tinymixtapes.com": "Tiny Mix Tapes",
+  "uncut.co.uk": "Uncut",
   "undertheradarmag.com": "Under the Radar",
 };
 
@@ -165,80 +166,84 @@ const review_links = make_links(REVIEWS, release);
   <MainSide>
     <img src={release_image_src(release)} />
 
-    <div class="info">
-      released: <a href={`/year/${year}`}>{year}</a>{release.date.substring(4)}
+    <div class="panel">
+      <div class="info">
+        released: <a href={`/year/${year}`}>{year}</a>{
+          release.date.substring(4)
+        }
+      </div>
+      {
+        release.label ? (
+          <div class="info" style="margin-top: -0.6rem">
+            on label:{" "}
+            <a href={`/label/${release.label.id}`}>{release.label.name}</a>
+          </div>
+        ) : null
+      }
+
+      {
+        release.artists.length > 0 ? (
+          <div class="info">
+            {release.artists.length == 1 ? "artist: " : "artists: "}
+            <SepLinks
+              links={release.artists.map((artist) => [
+                `/artist/${artist.id}`,
+                artist_name(artist),
+              ])}
+            />
+          </div>
+        ) : null
+      }
+
+      {
+        main_genres.length > 0 ? (
+          <div class="info">
+            {main_genres.length == 1 ? "genre: " : "genres: "}
+            <SepLinks
+              links={main_genres.map((genre) => [
+                `/genre/${genre.id}`,
+                genre.name,
+              ])}
+            />
+          </div>
+        ) : null
+      }
+      {
+        other_genres.length > 0 ? (
+          <div class="info" style="margin-top: -0.6rem">
+            with some:
+            <SepLinks
+              links={other_genres.map((genre) => [
+                `/genre/${genre.id}`,
+                genre.name,
+              ])}
+            />
+          </div>
+        ) : null
+      }
+
+      {
+        stream_links.length > 0 ? (
+          <div class="info">
+            listen at: <SepLinks links={stream_links} external />
+          </div>
+        ) : null
+      }
+      {
+        other_links.length > 0 ? (
+          <div class="info">
+            see also: <SepLinks links={other_links} external />
+          </div>
+        ) : null
+      }
+      {
+        review_links.length > 0 ? (
+          <div class="info">
+            more reviews: <SepLinks links={review_links} external />
+          </div>
+        ) : null
+      }
     </div>
-    {
-      release.label ? (
-        <div class="info" style="margin-top: -0.6rem">
-          on label:{" "}
-          <a href={`/label/${release.label.id}`}>{release.label.name}</a>
-        </div>
-      ) : null
-    }
-
-    {
-      release.artists.length > 0 ? (
-        <div class="info">
-          {release.artists.length == 1 ? "artist: " : "artists: "}
-          <SepLinks
-            links={release.artists.map((artist) => [
-              `/artist/${artist.id}`,
-              artist_name(artist),
-            ])}
-          />
-        </div>
-      ) : null
-    }
-
-    {
-      main_genres.length > 0 ? (
-        <div class="info">
-          {main_genres.length == 1 ? "genre: " : "genres: "}
-          <SepLinks
-            links={main_genres.map((genre) => [
-              `/genre/${genre.id}`,
-              genre.name,
-            ])}
-          />
-        </div>
-      ) : null
-    }
-    {
-      other_genres.length > 0 ? (
-        <div class="info" style="margin-top: -0.6rem">
-          with some:
-          <SepLinks
-            links={other_genres.map((genre) => [
-              `/genre/${genre.id}`,
-              genre.name,
-            ])}
-          />
-        </div>
-      ) : null
-    }
-
-    {
-      stream_links.length > 0 ? (
-        <div class="info">
-          listen at: <SepLinks links={stream_links} external />
-        </div>
-      ) : null
-    }
-    {
-      other_links.length > 0 ? (
-        <div class="info">
-          see also: <SepLinks links={other_links} external />
-        </div>
-      ) : null
-    }
-    {
-      review_links.length > 0 ? (
-        <div class="info">
-          more reviews: <SepLinks links={review_links} external />
-        </div>
-      ) : null
-    }
   </MainSide>
 
   {
@@ -260,7 +265,7 @@ const review_links = make_links(REVIEWS, release);
 
 <style>
   img {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
 
   .artist {
@@ -282,6 +287,11 @@ const review_links = make_links(REVIEWS, release);
     margin: 0;
     margin-bottom: 2rem;
     text-align: right;
+  }
+
+  .panel {
+    padding: 0.5rem;
+    background-color: var(--bg-panl);
   }
 
   .info {

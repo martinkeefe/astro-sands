@@ -66,8 +66,10 @@ const links: [string, string, string?][] = sortBy(
   <MainSide>
     {
       links.length > 0 ? (
-        <div class="info">
-          see also: <SepLinks links={links} external />
+        <div class="panel">
+          <div class="info">
+            see also: <SepLinks links={links} external />
+          </div>{" "}
         </div>
       ) : null
     }
@@ -85,6 +87,11 @@ const links: [string, string, string?][] = sortBy(
     margin: 0;
     margin-bottom: 1.5rem;
     text-align: right;
+  }
+
+  .panel {
+    padding: 0.5rem;
+    background-color: var(--bg-panl);
   }
 
   .info {
