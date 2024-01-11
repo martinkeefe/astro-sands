@@ -8,6 +8,7 @@ export interface Release {
   date: string;
   title: string;
   which: string | null;
+  desc: string | null;
   as_by: string | null;
   label: Label | null;
   image_ext: string | null;
@@ -27,6 +28,8 @@ export interface Artist {
   name: string;
   family_name: string | null;
   which: string | null;
+  desc: string | null;
+  text: string | null;
   links: Link[];
   releases: Release[];
 }
@@ -35,6 +38,7 @@ export interface Genre {
   id: string;
   name: string;
   desc: string | null;
+  text: string | null;
   tags: string | null;
   parents: Genre[];
   sub_genres: Genre[];
@@ -48,6 +52,8 @@ export interface Label {
   id: string;
   name: string;
   which: string | null;
+  desc: string | null;
+  text: string | null;
   links: Link[];
   releases: Release[];
 }
@@ -64,6 +70,7 @@ export interface JsonRelease {
   date: string;
   title: string;
   which: string | null;
+  desc: string | null;
   as_by: string | null;
   label_id: string | null;
   image_ext: string | null;
@@ -83,6 +90,8 @@ export interface JsonArtist {
   name: string;
   family_name: string | null;
   which: string | null;
+  desc: string | null;
+  text: string | null;
   links: Link[];
   release_ids: string[];
 }
@@ -91,6 +100,7 @@ export interface JsonGenre {
   id: string;
   name: string;
   desc: string | null;
+  text: string | null;
   tags: string | null;
   parent_ids: string[];
   child_ids: string[];
@@ -102,6 +112,8 @@ export interface JsonLabel {
   id: string;
   name: string;
   which: string | null;
+  desc: string | null;
+  text: string | null;
   links: Link[];
   release_ids: string[];
 }

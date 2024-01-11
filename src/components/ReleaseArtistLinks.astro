@@ -1,0 +1,40 @@
+---
+import { artist_name } from "../functions";
+import type { Artist, Release } from "../types";
+
+interface Props {
+  release: Release;
+  // artists: Artist[];
+}
+
+const { release } = Astro.props;
+---
+
+<>
+  {
+    release.as_by && release.artists.length != 1 ? (
+      <span style={{ fontWeight: 600 }}>{release.as_by}</span>
+    ) : (
+      release.artists.map((artist, i) => (
+        <>
+          {release.artists.length < 2 || i == 0
+            ? ""
+            : i == release.artists.length - 1
+              ? " & "
+              : ", "}
+          <a
+            href={`/artist/${artist.id}`}
+            style={{ display: "inline", fontWeight: 600 }}
+          >
+            {release.as_by || artist_name(artist)}
+            {artist.which ? (
+              <span class="which">{` (${artist.which})`}</span>
+            ) : (
+              ""
+            )}
+          </a>
+        </>
+      ))
+    )
+  }
+</>

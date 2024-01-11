@@ -1,4 +1,5 @@
 ---
+import ReleaseArtistLinks from "./ReleaseArtistLinks.astro";
 import { release_artist_names, release_image_src } from "../functions";
 import type { Release } from "../types";
 
@@ -24,7 +25,8 @@ const { releases = [], hide = "", large = false } = Astro.props;
           </a>
         )}
         {hide.includes("A") || r.artists.length == 0 ? null : (
-          <b>{release_artist_names(r)}</b>
+          <ReleaseArtistLinks release={r} />
+          // <b>{release_artist_names(r)}</b>
         )}
         {hide.includes("T") ? null : <i>{r.title}</i>}
       </div>
@@ -38,23 +40,26 @@ const { releases = [], hide = "", large = false } = Astro.props;
     gap: 1rem;
     flex-wrap: wrap;
   }
+  .releases.large {
+    gap: 1.5rem;
+  }
 
   .card {
-    width: 9rem;
+    width: 9.5rem;
     overflow-x: hidden;
   }
   .large .card {
-    width: 14.5rem;
+    width: 14.35rem;
   }
 
   img {
     display: block;
-    width: 9rem;
-    height: 9rem;
+    width: 9.5rem;
+    height: 9.5rem;
     margin-bottom: 0.25rem;
   }
   .large img {
-    width: 14.5rem;
-    height: 14.5rem;
+    width: 14.35rem;
+    height: 14.35rem;
   }
 </style>

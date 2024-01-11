@@ -7,6 +7,7 @@ import MainText from "../../components/MainText.astro";
 import MainSide from "../../components/MainSide.astro";
 import MainWide from "../../components/MainWide.astro";
 import SepLinks from "../../components/SepLinks.astro";
+import FancyText from "../../components/FancyText.astro";
 import Releases from "../../components/Releases.astro";
 import type { JsonData, Artist, Release } from "../../types";
 import { artist_name, link_site } from "../../functions";
@@ -60,9 +61,17 @@ const links: [string, string, string?][] = sortBy(
 <Layout title={`Artist: ${artist_name(artist)}`}>
   <MainHead>Artist</MainHead>
   <MainName>{artist_name(artist)}</MainName>
-  <MainWide>
-    <Releases releases={artist.releases} large />
-  </MainWide>
+  <MainText>
+    {
+      artist.desc
+        ? artist.desc.split("\n\n").map((para) => (
+            <p class="text">
+              <FancyText para={para} />
+            </p>
+          ))
+        : null
+    }
+  </MainText>
   <MainSide>
     {
       links.length > 0 ? (
@@ -74,6 +83,9 @@ const links: [string, string, string?][] = sortBy(
       ) : null
     }
   </MainSide>
+  <MainWide>
+    <Releases releases={artist.releases} large />
+  </MainWide>
 </Layout>
 
 <style>

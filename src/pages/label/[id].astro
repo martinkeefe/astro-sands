@@ -3,9 +3,11 @@ import sortBy from "lodash/sortBy";
 import Layout from "../../layouts/Layout.astro";
 import MainHead from "../../components/MainHead.astro";
 import MainName from "../../components/MainName.astro";
+import MainText from "../../components/MainText.astro";
 import MainSide from "../../components/MainSide.astro";
 import MainWide from "../../components/MainWide.astro";
 import SepLinks from "../../components/SepLinks.astro";
+import FancyText from "../../components/FancyText.astro";
 import Releases from "../../components/Releases.astro";
 import type { JsonData, Label, Release } from "../../types";
 import { link_site } from "../../functions";
@@ -64,6 +66,17 @@ const links: [string, string, string?][] = sortBy(
 <Layout title={`Label: ${label.name}`}>
   <MainHead>Label</MainHead>
   <MainName>{label.name}</MainName>
+  <MainText>
+    {
+      label.desc
+        ? label.desc.split("\n\n").map((para) => (
+            <p class="text">
+              <FancyText para={para} />
+            </p>
+          ))
+        : null
+    }
+  </MainText>
   <MainSide>
     {
       links.length > 0 ? (

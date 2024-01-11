@@ -5,7 +5,7 @@ import MainSide from "../../components/MainSide.astro";
 import MainText from "../../components/MainText.astro";
 import MainName from "../../components/MainName.astro";
 import SepLinks from "../../components/SepLinks.astro";
-import FancyPara from "../../components/FancyPara.astro";
+import FancyText from "../../components/FancyText.astro";
 import type { JsonData, Release } from "../../types";
 import {
   artist_name,
@@ -166,6 +166,14 @@ const review_links = make_links(REVIEWS, release);
   <MainSide>
     <img src={release_image_src(release)} />
 
+    <!-- {
+      release.desc ? (
+        <p class="desc">
+          <FancyPara para={release.desc} />
+        </p>
+      ) : null
+    } -->
+
     <div class="panel">
       <div class="info">
         released: <a href={`/year/${year}`}>{year}</a>{
@@ -253,8 +261,9 @@ const review_links = make_links(REVIEWS, release);
           para.startsWith("-") ? (
             <p class="byline">{para.substring(2)}</p>
           ) : (
+            // <hr class="sep" />
             <p class="text">
-              <FancyPara para={para} />
+              <FancyText para={para} />
             </p>
           )
         )}
@@ -278,6 +287,12 @@ const review_links = make_links(REVIEWS, release);
     font-weight: 400;
   }
 
+  /* p.desc {
+    margin: 0;
+    margin-bottom: 0.6rem;
+    text-align: justify;
+  } */
+
   p.text {
     margin: 0;
     margin-bottom: 0.6rem;
@@ -288,6 +303,14 @@ const review_links = make_links(REVIEWS, release);
     margin: 0;
     margin-bottom: 2rem;
     text-align: right;
+    /* text-decoration: underline;
+    text-underline-offset: 0.5rem; */
+  }
+
+  hr.sep {
+    width: 4rem;
+    height: 0.1rem;
+    margin-bottom: 2rem;
   }
 
   .panel {
