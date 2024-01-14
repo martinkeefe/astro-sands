@@ -115,15 +115,15 @@ const review_links = make_links(SITES, "review", release);
         </span>
       ) : null
     }
-    <span class="artist">{release_artist_names(release)}</span>
     <span class="title">{release.title}</span>
+    {release.status == "A*" ? " ⭐" : null}
+    <span class="artist">{release_artist_names(release)}</span>
     <!-- <span class="h1">
       {release.which ? ` [${release.which}] ` : ""}
        ({year}{release.label ? ", " : ""}{
         release.label ? release.label.name : ""
       })
     </span> -->
-    {release.status == "A*" ? " ⭐" : null}
   </MainName>
 
   <MainSide>
@@ -242,6 +242,8 @@ const review_links = make_links(SITES, "review", release);
   }
 
   .artist {
+    display: block;
+    font-size: 80%;
     font-weight: 700;
   }
 
