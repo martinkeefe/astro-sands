@@ -1,12 +1,55 @@
 ---
+import sortBy from "lodash/sortBy";
 import MainHead from "../components/MainHead.astro";
+import MainWide from "../components/MainWide.astro";
 import Layout from "../layouts/Layout.astro";
+import Releases from "../components/Releases.astro";
+import type { JsonData } from "../types";
 
-return Astro.redirect("/year");
+// return Astro.redirect("/year");
+
+const response = await fetch(
+  "https://mjk-decades.s3.eu-west-2.amazonaws.com/db.json"
+);
+const data = (await response.json()) as JsonData;
+
+const json = sortBy(
+  Object.values(data.releases).filter((r) => r.posted),
+  ["posted", "date"]
+);
+json.reverse();
+
+const releases = json.slice(0, 12).map((json) => ({
+  ...json,
+  label: json.label_id ? { ...data.labels[json.label_id], releases: [] } : null,
+  artists: json.artist_ids.map((id) => ({
+    ...data.artists[id],
+    releases: [],
+  })),
+  genres: json.genre_id_ords.map(({ id, ord }) => ({
+    ord,
+    ...data.genres[id],
+    parents: [],
+    sub_genres: [],
+    releases: [],
+  })),
+}));
 ---
 
 <Layout title="Welcome to Vermilion Sands">
-  <MainHead>Welcome</MainHead>
+  <MainHead />
+  <MainWide>
+    Welcome to Vermilion Sands, a selection of releases from <i>n</i> decades ago
+    (although <i>n</i> could be zero) curated by <a
+      href="http://www.martinkeefe.com/mnm/09">Monday Night Martin</a
+    >. These are posted on <a href="https://www.facebook.com/VermilionSands10k"
+      >FaceBook</a
+    > and (more recently) on <a href="https://twitter.com/VermiSands">Twitter</a
+    > as they occur and are collected together here.
+
+    <h2>Recent Posts</h2>
+    <Releases {releases} large />
+  </MainWide>
 </Layout>
 
 <style></style>

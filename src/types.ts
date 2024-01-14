@@ -16,6 +16,7 @@ export interface Release {
   tags: string | null;
   text: string | null;
   status: string | null;
+  posted: string | null;
   no_link: string | null;
   links: Link[];
   artists: Artist[];
@@ -78,6 +79,7 @@ export interface JsonRelease {
   tags: string | null;
   text: string | null;
   status: string | null;
+  posted: string | null;
   no_link: string | null;
   links: Link[];
   artist_ids: string[];

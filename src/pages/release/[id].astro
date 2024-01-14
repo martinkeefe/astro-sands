@@ -1,4 +1,5 @@
 ---
+import { smartypantsu } from "smartypants";
 import Layout from "../../layouts/Layout.astro";
 import MainHead from "../../components/MainHead.astro";
 import MainSide from "../../components/MainSide.astro";
@@ -7,6 +8,7 @@ import MainName from "../../components/MainName.astro";
 import SepLinks from "../../components/SepLinks.astro";
 import FancyText from "../../components/FancyText.astro";
 import type { JsonData, Release } from "../../types";
+import { SITES, type Kind, type Site } from "../../sites";
 import {
   artist_name,
   link_site,
@@ -61,62 +63,16 @@ const year = release.date.substring(0, 4);
 const main_genres = release.genres.filter((g) => g.ord < 100);
 const other_genres = release.genres.filter((g) => g.ord > 100);
 
-const STREAMERS: Record<string, string> = {
-  "bandcamp.com": "Bandcamp",
-  "soundcloud.com": "SoundCloud",
-  "music.youtube.com": "YouTube Music",
-  "spotify.com": "Spotify",
-  "apple.com": "Apple",
-  "deezer.com": "Deezer",
-  // "youtube.com": "YouTube",
-  "tidal.com": "Tidal",
-};
-
-const SITE_NAMES: Record<string, string> = {
-  "wikipedia.org": "Wikipedia",
-  "wikidata.org": "WikiData",
-  "google.com": "Google",
-  "musicbrainz.org": "MusicBrainz",
-  "discogs.com": "Discogs",
-  "allmusic.com": "AllMusic",
-  "rateyourmusic.com": "RateYourMusic",
-  "imdb.com": "IMDB",
-  "tvtropes.org": "TV Tropes",
-  "sf-encyclopedia.com": "SF Encyclopedia",
-  "progarchives.com": "ProgArchives",
-  "jazzdisco.org": "Jazz Discography",
-  "metal-archives.com": "Metal Archives",
-  "albumoftheyear.org": "AlbumOfTheYear",
-  "anydecentmusic.com": "Any Decent Music",
-  "metacritic.com": "MetaCritic",
-};
-
-const REVIEWS: Record<string, string> = {
-  "pitchfork.com": "Pitchfork",
-  "bbc.co.uk": "BBC",
-  "theguardian.com": "The Guardian",
-  "nme.com": "NME",
-  "rollingstone.com": "Rolling Stone",
-  "recordcollectormag.com": "Record Collector",
-  "drownedinsound.com": "Drowned in Sound",
-  "exclaim.ca": "Exclaim!",
-  "noripcord.com": "No Ripcord",
-  "pastemagazine.com": "Paste",
-  "popmatters.com": "Pop Matters",
-  "ra.co": "Resident Advisor",
-  "slantmagazine.com": "Slant",
-  "starsend.org": "Star’s End",
-  "tinymixtapes.com": "Tiny Mix Tapes",
-  "uncut.co.uk": "Uncut",
-  "undertheradarmag.com": "Under the Radar",
-};
-
-function make_links(site_list: Record<string, string>, release: Release) {
+function make_links(
+  site_list: Record<string, Site>,
+  kind: Kind | "",
+  release: Release
+) {
   const links: [string, string, string?][] = [];
   for (const site of Object.keys(site_list)) {
     for (const link of release.links) {
-      if (link_site(link) == site) {
-        const lnk: [string, string, string?] = [link.url, site_list[site]];
+      if (link_site(link) === site && (site_list[site].kind ?? "") === kind) {
+        const lnk: [string, string, string?] = [link.url, site_list[site].name];
         if (site == "rateyourmusic.com" && release_has_score(release, "rym")) {
           lnk.push(` (${release_score(release, "rym")} / 5)`);
         } else if (
@@ -134,17 +90,17 @@ function make_links(site_list: Record<string, string>, release: Release) {
   return links;
 }
 
-const stream_links = make_links(STREAMERS, release);
-const other_links = make_links(SITE_NAMES, release);
-const review_links = make_links(REVIEWS, release);
+const stream_links = make_links(SITES, "stream", release);
+const other_links = make_links(SITES, "", release);
+const review_links = make_links(SITES, "review", release);
 ---
 
 <Layout
   title={`Release: ${release.title}`}
-  og_title={release.title}
-  og_description={`${year} ${release_kind(
-    release
-  ).toLowerCase()} by ${release_artist_names(release)}`}
+  og_title={`${smartypantsu(release.title)} | ${smartypantsu(
+    release_artist_names(release)
+  )}`}
+  og_description={release.desc ? smartypantsu(release.desc) : ""}
   og_image={release_image_src(release)}
   og_url={`vermilionsands.org/release/${id}`}
   og_type={"music.album"}
@@ -152,6 +108,13 @@ const review_links = make_links(REVIEWS, release);
   <MainHead>{release_kind(release)}</MainHead>
 
   <MainName>
+    {
+      release.posted ? (
+        <span class="posted">
+          <span class="info-lbl">posted</span>: {release.posted}
+        </span>
+      ) : null
+    }
     <span class="artist">{release_artist_names(release)}</span>
     <span class="title">{release.title}</span>
     <!-- <span class="h1">
@@ -322,5 +285,20 @@ const review_links = make_links(REVIEWS, release);
     margin-bottom: 0.6rem;
     margin-left: 1rem;
     text-indent: -1rem;
+  }
+
+  .posted {
+    display: block;
+    padding: 0.1rem 0.5rem 0.3rem 0.5rem;
+    background-color: var(--bg-panl);
+    font-size: medium;
+    font-weight: normal;
+    margin-bottom: 0.5rem;
+  }
+
+  .info-lbl {
+    font-family: var(--face-head);
+    font-variant: small-caps;
+    font-size: 110%;
   }
 </style>
