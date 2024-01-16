@@ -49,6 +49,10 @@ export const SITES: Record<string, Site> = {
   "imdb.com": { name: "IMDB", image: "imdb.com.png" },
   "instagram.com": { name: "Instagram", image: "instagram.com.png" },
   "jazzdisco.org": { name: "Jazz Discography", image: "jazzdisco.org.png" },
+  "jazzmusicarchives.com": {
+    name: "Jazz Music Archives",
+    image: "jazzmusicarchives.com.png",
+  },
   "metacritic.com": { name: "MetaCritic", image: "metacritic.com.png" },
   "metal-archives.com": {
     name: "Metal Archives",
@@ -92,6 +96,11 @@ export const SITES: Record<string, Site> = {
   "gramophone.co.uk": {
     name: "Gramophone",
     image: "gramophone.co.uk.png",
+    kind: "review",
+  },
+  "marlbank.net": {
+    name: "Marlbank",
+    image: "marlbank.net.png",
     kind: "review",
   },
   "nme.com": { name: "NME", image: "nme.com.png", kind: "review" },

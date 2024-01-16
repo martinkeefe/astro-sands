@@ -93,15 +93,18 @@ function make_links(
 const stream_links = make_links(SITES, "stream", release);
 const other_links = make_links(SITES, "", release);
 const review_links = make_links(SITES, "review", release);
+
+const title = smartypantsu(release.title);
+const artist = smartypantsu(release_artist_names(release));
+const desc = release.desc ? smartypantsu(release.desc) : "";
+const image = release_image_src(release);
 ---
 
 <Layout
-  title={`Release: ${release.title}`}
-  og_title={`${smartypantsu(release.title)} | ${smartypantsu(
-    release_artist_names(release)
-  )}`}
-  og_description={release.desc ? smartypantsu(release.desc) : ""}
-  og_image={release_image_src(release)}
+  title={`Release: ${title}`}
+  og_title={`${title} | ${artist}`}
+  og_description={desc}
+  og_image={image}
   og_url={`vermilionsands.org/release/${id}`}
   og_type={"music.album"}
 >
@@ -115,9 +118,9 @@ const review_links = make_links(SITES, "review", release);
         </span>
       ) : null
     }
-    <span class="title">{release.title}</span>
+    <span class="title">{title}</span>
     {release.status == "A*" ? " ⭐" : null}
-    <span class="artist">{release_artist_names(release)}</span>
+    <span class="artist">{artist}</span>
     <!-- <span class="h1">
       {release.which ? ` [${release.which}] ` : ""}
        ({year}{release.label ? ", " : ""}{
@@ -127,7 +130,7 @@ const review_links = make_links(SITES, "review", release);
   </MainName>
 
   <MainSide>
-    <img src={release_image_src(release)} />
+    <img src={image} />
 
     <!-- {
       release.desc ? (
