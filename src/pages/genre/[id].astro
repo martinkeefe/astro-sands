@@ -1,4 +1,5 @@
 ---
+import { smartypantsu } from "smartypants";
 import sortBy from "lodash/sortBy";
 import Layout from "../../layouts/Layout.astro";
 import MainHead from "../../components/MainHead.astro";
@@ -96,7 +97,7 @@ const links: [string, string, string?][] = sortBy(
   <MainHead>Genre</MainHead>
   <MainName>{genre.name}</MainName>
   <MainText>
-    <p class="text">{genre.desc}</p>
+    <p class="text">{smartypantsu(genre.desc)}</p>
     <!-- <p class="byline">RateYourMusic</p> -->
   </MainText>
   <MainSide>
@@ -134,8 +135,9 @@ const links: [string, string, string?][] = sortBy(
   }
   p.text {
     margin: 0;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.8rem;
     text-align: justify;
+    line-height: 1.6rem;
   }
 
   p.byline {

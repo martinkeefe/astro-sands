@@ -39,17 +39,27 @@ const releases = json.slice(0, 12).map((json) => ({
 <Layout title="Welcome to Vermilion Sands">
   <MainHead />
   <MainWide>
-    Welcome to Vermilion Sands, a selection of releases from <i>n</i> decades ago
-    (although <i>n</i> could be zero) curated by <a
-      href="http://www.martinkeefe.com/mnm/09">Monday Night Martin</a
-    >. These are posted on <a href="https://www.facebook.com/VermilionSands10k"
-      >FaceBook</a
-    > and (more recently) on <a href="https://twitter.com/VermiSands">Twitter</a
-    > as they occur and are collected together here.
+    <p class="text">
+      Welcome to Vermilion Sands, a selection of releases from <i>n</i> decades ago
+      (although <i>n</i> could be zero) curated by <a
+        href="http://www.martinkeefe.com/mnm/09">Monday Night Martin</a
+      >. These are posted on <a
+        href="https://www.facebook.com/VermilionSands10k">FaceBook</a
+      > and (more recently) on <a href="https://twitter.com/VermiSands"
+        >Twitter</a
+      > as they occur and are collected together here.
+    </p>
 
     <h2>Recent Posts</h2>
     <Releases {releases} large />
   </MainWide>
 </Layout>
 
-<style></style>
+<style>
+  p.text {
+    margin-top: -3rem;
+    margin-bottom: 2rem;
+    text-align: justify;
+    line-height: 1.6rem;
+  }
+</style>
