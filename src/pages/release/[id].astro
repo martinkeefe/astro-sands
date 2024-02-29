@@ -1,4 +1,5 @@
 ---
+import { getImage } from "astro:assets";
 import { smartypantsu } from "smartypants";
 import Layout from "../../layouts/Layout.astro";
 import MainHead from "../../components/MainHead.astro";
@@ -97,14 +98,22 @@ const review_links = make_links(SITES, "review", release);
 const title = smartypantsu(release.title);
 const artist = smartypantsu(release_artist_names(release));
 const desc = release.desc ? smartypantsu(release.desc) : "";
-const image = release_image_src(release);
+// const image = ;
+const og_image = await getImage({
+  src: release_image_src(release),
+  inferSize: true,
+  format: "jpg",
+  widths: [480],
+  sizes: "480px",
+});
+// console.log(og_image.srcSet.values);
 ---
 
 <Layout
   title={`Release: ${title}`}
   og_title={`${title} | ${artist}`}
   og_description={desc}
-  og_image={image}
+  og_image={og_image.src}
   og_url={`vermilionsands.org/release/${id}`}
   og_type={"music.album"}
 >
@@ -130,7 +139,7 @@ const image = release_image_src(release);
   </MainName>
 
   <MainSide>
-    <img src={image} />
+    <img src={og_image.src} />
 
     <!-- {
       release.desc ? (

@@ -9,4 +9,7 @@ export default defineConfig({
       enabled: true,
     },
   }),
+  image: {
+    domains: ["mjk-decades.s3.eu-west-2.amazonaws.com"],
+  },
 });
